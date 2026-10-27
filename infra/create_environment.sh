@@ -128,6 +128,17 @@ KV_ID=$(az keyvault show -n "$KEYVAULT" -g "$RG" --query id -o tsv)
 az role assignment create --assignee-object-id "$MY_OBJECT_ID" --assignee-principal-type User \
   --role "Key Vault Secrets Officer" --scope "$KV_ID" --only-show-errors >/dev/null 2>&1 || true
 
+# Key Vault-backed Databricks secret scopes are read by the AzureDatabricks service
+# principal (application id 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d), which needs
+# Key Vault Secrets User on the vault (decision 17).
+DBX_SP_OBJECT_ID=$(az ad sp show --id 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d --query id -o tsv 2>/dev/null || true)
+if [[ -n "$DBX_SP_OBJECT_ID" ]]; then
+  az role assignment create --assignee-object-id "$DBX_SP_OBJECT_ID" --assignee-principal-type ServicePrincipal \
+    --role "Key Vault Secrets User" --scope "$KV_ID" --only-show-errors >/dev/null 2>&1 || true
+else
+  echo "    warning: AzureDatabricks service principal not found in this tenant; the secret scope will fail until it has Key Vault Secrets User" >&2
+fi
+
 set_secret() {  # name value
   for attempt in 1 2 3 4 5 6; do
     if az keyvault secret set --vault-name "$KEYVAULT" -n "$1" --value "$2" --only-show-errors >/dev/null 2>&1; then return 0; fi

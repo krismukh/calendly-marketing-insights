@@ -13,7 +13,7 @@ The architecture proposal and diagram are in `docs/`.
 | Phase | Scope | Status |
 |---|---|---|
 | 0. Preparation | Repository, fixtures, decision log, spend source check | Complete |
-| 1. Environment | `infra/create_environment.sh`, `infra/configure_databricks.sh` | Scripts ready; to be run from Cloud Shell |
+| 1. Environment | `infra/create_environment.sh`, `infra/configure_databricks.sh` | Complete |
 | 2. Capture | `fn_calendly_receiver`, `fn_spend_fetcher`, unit tests | Awaiting SME approval |
 | 3. Delta Lake layers | `01_bronze`, `02_silver`, `03_gold` notebooks | Awaiting SME approval |
 | 4. Scheduling, CI/CD, observability | Databricks jobs, GitHub Actions deployment, alerts | Awaiting SME approval |

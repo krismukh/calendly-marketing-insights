@@ -93,7 +93,20 @@ Tables are referenced in notebooks as `calendly.bronze.calendly_events`, `calend
 - [ ] Catalog `calendly` with schemas `bronze`, `silver`, `gold` visible in Catalog Explorer
 - [ ] Secret scope `calendly` lists `calendly-signing-key`
 
+## Run record
+
+- Environment created 2026-10-27 from Cloud Shell; `verify_environment.sh` checklist satisfied.
+- Databricks workspace URL: `https://adb-7405605822390071.11.azuredatabricks.net`
+- Unity Catalog metastore assigned automatically; `configure_databricks.sh` completed after the
+  role assignment described under Known issues.
+
 ## Known issues
+
+- **403 when creating or listing the Key Vault-backed secret scope.** The scope is read by the
+  AzureDatabricks service principal, which needs Key Vault Secrets User on the vault. The
+  environment script now assigns it (decision 17); on a vault created before that change, run
+  `az role assignment create --assignee-object-id $(az ad sp show --id 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d --query id -o tsv) --assignee-principal-type ServicePrincipal --role "Key Vault Secrets User" --scope $(az keyvault show -n kv-calendly-kcm -g rg-calendly --query id -o tsv)`
+  and rerun `configure_databricks.sh`.
 
 - **Key Vault name conflict.** Vault names are global and soft-deleted vaults keep their
   name for 90 days. The script recovers a soft-deleted `kv-calendly-kcm` automatically.
