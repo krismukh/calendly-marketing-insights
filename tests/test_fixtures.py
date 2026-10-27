@@ -40,5 +40,5 @@ def test_spend_file_shape():
     for record in records:
         assert set(record) == {"date", "channel", "spend"}
         assert record["channel"] in CAMPAIGN_CHANNELS
-        assert isinstance(record["spend"], (int, float)) and record["spend"] > 0
+        assert isinstance(record["spend"], int | float) and record["spend"] > 0
     assert {r["channel"] for r in records} == CAMPAIGN_CHANNELS
