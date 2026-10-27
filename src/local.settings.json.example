@@ -1,0 +1,18 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "STORAGE_ACCOUNT_URL": "https://stcalendlykcm.blob.core.windows.net",
+    "BRONZE_CONTAINER": "bronze",
+    "CALENDLY_LANDING_PREFIX": "calendly/landing",
+    "SPEND_LANDING_PREFIX": "spend/landing",
+    "SPEND_QUARANTINE_PREFIX": "spend/quarantine",
+    "SPEND_BASE_URL": "https://dea-data-bucket.s3.us-east-1.amazonaws.com/calendly_spend_data",
+    "SPEND_FETCH_SCHEDULE": "0 15,45 10-16 * * *",
+    "SPEND_LOOKBACK_DAYS": "35",
+    "VERIFY_SIGNATURE": "false",
+    "SIGNATURE_TOLERANCE_SECONDS": "300",
+    "CALENDLY_SIGNING_KEY": ""
+  }
+}

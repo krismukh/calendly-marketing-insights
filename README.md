@@ -14,11 +14,13 @@ The architecture proposal and diagram are in `docs/`.
 |---|---|---|
 | 0. Preparation | Repository, fixtures, decision log, spend source check | Complete |
 | 1. Environment | `infra/create_environment.sh`, `infra/configure_databricks.sh` | Complete |
-| 2. Capture | `fn_calendly_receiver`, `fn_spend_fetcher`, unit tests | Awaiting SME approval |
-| 3. Delta Lake layers | `01_bronze`, `02_silver`, `03_gold` notebooks | Awaiting SME approval |
-| 4. Scheduling, CI/CD, observability | Databricks jobs, GitHub Actions deployment, alerts | Awaiting SME approval |
-| 5. Dashboard | Streamlit application | Awaiting SME approval |
-| 6. Subscription and validation | Webhook subscription, live bookings, validation report | Awaiting SME approval |
+| 2. Capture | `fn_calendly_receiver`, `fn_spend_fetcher`, unit tests | Code complete; deployment and smoke test pending |
+| 3. Delta Lake layers | `01_bronze`, `02_silver`, `03_gold` notebooks | Not started |
+| 4. Scheduling, CI/CD, observability | Databricks jobs, GitHub Actions deployment, alerts | Not started |
+| 5. Dashboard | Streamlit application | Not started |
+| 6. Subscription and validation | Webhook subscription, live bookings, validation report | Not started |
+
+SME approval of the architecture was received on 2026-10-27 (decision 20).
 
 ## Architecture
 
@@ -49,14 +51,14 @@ Lambda architecture on Azure (proposal Section 4):
 | Path | Content |
 |---|---|
 | `docs/` | Architecture proposal (Word), draw.io diagram, decision log, phase runbooks |
-| `infra/` | `create_environment.sh`, `verify_environment.sh`, `configure_databricks.sh` |
-| `src/functions/` | Azure Functions project (Phase 2) |
-| `src/calendly_pipeline/` | Shared modules: signature verification, landing writes, spend client (Phase 2) |
+| `infra/` | `create_environment.sh`, `verify_environment.sh`, `configure_databricks.sh`, `deploy_function.sh` |
+| `src/` | Azure Functions project root: `function_app.py`, `host.json`, `requirements.txt` |
+| `src/calendly_pipeline/` | Shared modules: `config.py`, `verify.py` (signature), `events.py` (parsing, landing paths), `landing.py` (ADLS writes), `spend_client.py` |
 | `notebooks/` | Databricks notebooks in source form (Phase 3) |
 | `jobs/` | Databricks job definitions (Phase 4) |
 | `dashboards/` | Streamlit application (Phase 5) |
 | `tests/` | pytest unit tests; `tests/fixtures/` holds the sample event and spend records from the brief |
-| `scripts/` | `check_spend_source.py`; later `send_test_event.py`, `reload_range.py` |
+| `scripts/` | `check_spend_source.py`, `send_test_event.py`; later `reload_range.py` |
 
 ## Local setup (workstation)
 
@@ -74,7 +76,16 @@ python scripts\check_spend_source.py
 ## Azure environment
 
 See `docs/phase1_environment.md` for the resources, settings, run instructions, and
-verification checklist.
+verification checklist, and `docs/phase2_capture.md` for the functions, their behavior,
+deployment, and the smoke test.
+
+## Endpoints
+
+| Route | Auth | Purpose |
+|---|---|---|
+| `POST /api/calendly?code=<function key>` | function key (+ Calendly signature when enabled) | webhook receiver; this is the URL given to the program |
+| `GET /api/health` | anonymous | liveness and configuration presence, no secrets |
+| `GET /api/spend/fetch?code=<function key>` | function key | run the spend fetch on demand |
 
 ## Why this stack
 
