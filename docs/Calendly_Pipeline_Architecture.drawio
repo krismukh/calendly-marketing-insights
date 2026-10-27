@@ -1,0 +1,177 @@
+<mxfile host="app.diagrams.net" agent="draw.io">
+  <diagram id="calendly-arch" name="Calendly Pipeline Architecture">
+    <mxGraphModel dx="1571" dy="931" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#1F3864;" value="Calendly Marketing Insights: Lambda Architecture with Delta Lake (Azure)" vertex="1">
+          <mxGeometry height="40" width="1000" x="70" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#595959;" value="Data Engineering Project 6 · Krishna C. Mukherjee · v1.0, October 2026" vertex="1">
+          <mxGeometry height="24" width="900" x="40" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="g_ext_in" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#7F7F7F;dashed=1;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#404040;align=left;spacingLeft=8;" value="External: Calendly" vertex="1">
+          <mxGeometry height="400" width="220" x="40" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="g_azure" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FB;strokeColor=#0078D4;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#0B4F8A;align=left;spacingLeft=8;" value="Azure subscription · rg-calendly (West US 3)" vertex="1">
+          <mxGeometry height="660" width="1000" x="290" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="g_ext_out" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#7F7F7F;dashed=1;verticalAlign=top;fontStyle=1;fontSize=12;fontColor=#404040;align=left;spacingLeft=8;" value="External" vertex="1">
+          <mxGeometry height="500" width="240" x="1320" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=12;fontColor=#0B4F8A;" value="1. Capture (speed layer)" vertex="1">
+          <mxGeometry height="20" width="200" x="320" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=12;fontColor=#0B4F8A;" value="2. Delta Lake on ADLS Gen2" vertex="1">
+          <mxGeometry height="20" width="200" x="590" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=12;fontColor=#0B4F8A;" value="3. Transform (batch layer)" vertex="1">
+          <mxGeometry height="20" width="200" x="860" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" parent="1" style="text;html=1;align=center;fontStyle=1;fontSize=12;fontColor=#404040;" value="4. Serve" vertex="1">
+          <mxGeometry height="20" width="200" x="1340" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="calendly" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#404040;fontStyle=1;fontSize=12;" value="Calendly&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;organization webhook subscription&lt;br&gt;invitee.created · Calendly-Webhook-Signature&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="160" x="70" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="prospect" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#404040;fontSize=12;" value="Prospect&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;clicks a campaign ad (Facebook, YouTube, TikTok) and books a call on the campaign event type&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="160" x="70" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="e_prospect" edge="1" parent="1" source="prospect" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#404040;" target="calendly">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fn1_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Function_Apps.svg;" value="" vertex="1">
+          <mxGeometry height="46" width="50" x="395" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="fn1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0078D4;fontSize=12;" value="&lt;b&gt;fn_calendly_receiver&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;HTTP trigger · Python 3.11&lt;br&gt;verify signature → land raw JSON → HTTP 200&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="200" x="320" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="fn2_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Function_Apps.svg;" value="" vertex="1">
+          <mxGeometry height="46" width="50" x="395" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="fn2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0078D4;fontSize=12;" value="&lt;b&gt;fn_spend_fetcher&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;timer trigger · 06:15 ET daily&lt;br&gt;read file_index.json → download new spend files → land&lt;br&gt;retry every 30 min until noon, then alert&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="320" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="st_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/storage/Storage_Accounts.svg;" value="" vertex="1">
+          <mxGeometry height="40" width="50" x="665" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="bronze" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBE5D6;strokeColor=#C55A11;fontSize=12;" value="&lt;b&gt;Bronze · stcalendlykcm&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;landing JSON (raw, retained) · Delta tables&lt;br&gt;bronze.calendly_events · bronze.spend_files&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="200" x="590" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="silver" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDEDED;strokeColor=#7F7F7F;fontSize=12;" value="&lt;b&gt;Silver&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;silver.bookings · silver.meetings&lt;br&gt;silver.spend · silver.channel_map&lt;br&gt;flattened, typed, MERGE on keys, no PII&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="590" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="gold" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#BF9000;fontSize=12;" value="&lt;b&gt;Gold (serving layer)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;six metric tables: daily bookings, spend and CPB,&lt;br&gt;channel attribution, time slots, employee load&lt;br&gt;plus gold.pipeline_runs&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="200" x="590" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="dbx_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/analytics/Azure_Databricks.svg;" value="" vertex="1">
+          <mxGeometry height="46" width="50" x="950" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="dbx" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0078D4;fontSize=12;" value="&lt;b&gt;Azure Databricks · dbw-calendly-kcm&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;Workflows on single-node job clusters&lt;br&gt;01_bronze (Auto Loader) → 02_silver (MERGE) → 03_gold&lt;br&gt;job_calendly_hourly · job_daily_refresh 06:30 ET&lt;br&gt;retries · failure notification · reload by date range&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="230" x="860" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_icon" parent="1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" value="" vertex="1">
+          <mxGeometry height="48" width="48" x="1416" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#404040;fontSize=12;" value="&lt;b&gt;Public spend bucket&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;dea-data-bucket (AWS S3, us-east-1)&lt;br&gt;file_index.json · spend_data_YYYY-MM-DD.json&lt;br&gt;Day-1 spend at 06:00 ET · 30-day window · USD&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="200" x="1340" y="475" as="geometry" />
+        </mxCell>
+        <mxCell id="streamlit" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FF4B4B;fontSize=12;" value="&lt;b&gt;Streamlit dashboard&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;six metric pages + operations page&lt;br&gt;reads Gold Delta tables&lt;br&gt;marketing and operations users&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="1340" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="g_platform" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0078D4;dashed=1;verticalAlign=top;fontStyle=1;fontSize=11;fontColor=#0B4F8A;align=left;spacingLeft=8;" value="Platform services" vertex="1">
+          <mxGeometry height="170" width="950" x="320" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="kv_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/security/Key_Vaults.svg;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="415" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="kv" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=12;" value="&lt;b&gt;Key Vault · kv-calendly-kcm&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;calendly-signing-key&lt;br&gt;Databricks secret scope · Key Vault references&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="230" x="320" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="mi_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/identity/Managed_Identities.svg;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="652" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="mi" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=12;" value="&lt;b&gt;Managed identities&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;Function App · Databricks access connector&lt;br&gt;Blob Data Contributor · Key Vault Secrets User&lt;br&gt;encryption at rest (SSE) · TLS in transit&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="230" x="557" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="ai_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/devops/Application_Insights.svg;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="889" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="ai" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=12;" value="&lt;b&gt;Application Insights · appi-calendly-kcm&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;structured logs by booking_id and file_name&lt;br&gt;Monitor alerts: failures, spend file missing&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="230" x="794" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="gh_icon" parent="1" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/devops/DevOps.svg;" value="" vertex="1">
+          <mxGeometry height="40" width="40" x="1126" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="gh" parent="1" style="text;html=1;align=center;verticalAlign=top;fontSize=12;" value="&lt;b&gt;GitHub Actions CI/CD&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;ruff · pytest · deploy function · deploy notebooks and jobs&lt;br&gt;krismukh/calendly-marketing-insights&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="230" x="1031" y="655" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="calendly" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#404040;fontSize=10;labelBackgroundColor=#FFFFFF;" target="fn1" value="POST invitee.created (seconds)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="fn1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0078D4;fontSize=10;labelBackgroundColor=#FFFFFF;" target="bronze" value="land raw JSON">
+          <mxGeometry relative="1" x="-0.4" as="geometry">
+            <mxPoint y="-12" as="offset" />
+            <Array as="points">
+              <mxPoint x="545" y="275" />
+              <mxPoint x="545" y="255" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="fn2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0078D4;fontSize=10;labelBackgroundColor=#FFFFFF;" target="bronze" value="land spend files">
+          <mxGeometry relative="1" x="-0.55" as="geometry">
+            <mxPoint x="-40" as="offset" />
+            <Array as="points">
+              <mxPoint x="565" y="460" />
+              <mxPoint x="565" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="fn2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;startArrow=block;strokeColor=#404040;fontSize=10;labelBackgroundColor=#FFFFFF;" target="s3" value="GET index and spend file (06:15 ET)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="550" />
+              <mxPoint x="1300" y="550" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="bronze" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0078D4;fontSize=10;labelBackgroundColor=#FFFFFF;" target="dbx" value="Auto Loader">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint y="-14" as="offset" />
+            <Array as="points">
+              <mxPoint x="825" y="245" />
+              <mxPoint x="825" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="dbx" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0078D4;fontSize=10;labelBackgroundColor=#FFFFFF;" target="silver" value="MERGE">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="825" y="300" />
+              <mxPoint x="825" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="dbx" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0078D4;fontSize=10;labelBackgroundColor=#FFFFFF;" target="gold" value="overwrite metric tables">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="960" y="405" />
+              <mxPoint x="690" y="405" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="gold" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;startArrow=block;strokeColor=#BF9000;fontSize=10;labelBackgroundColor=#FFFFFF;" target="streamlit" value="read Gold">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="460" />
+              <mxPoint x="1200" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;fontColor=#404040;whiteSpace=wrap;" value="&lt;b&gt;Flow&lt;/b&gt;: booking made → event landed in Bronze within seconds (speed layer) → hourly MERGE into Silver → spend file fetched at 06:15 ET and daily refresh of Silver and Gold at 06:30 ET (batch layer) → Streamlit reads Gold (serving layer). Every step is idempotent and Bronze landing files are retained, so any date range can be reloaded; Delta time travel restores prior table versions." vertex="1">
+          <mxGeometry height="50" width="1520" x="40" y="790" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,73 @@
+{
+  "created_at": "2025-07-09T06:04:34.000000Z",
+  "created_by": "https://api.calendly.com/users/8ec9d4df-39c5-463a-8b40-bcb5d0a70edf",
+  "event": "invitee.created",
+  "payload": {
+    "cancel_url": "https://calendly.com/cancellations/22a0f2d6-1bde-4fc1-95c1-d969df1da21d",
+    "created_at": "2025-07-09T06:04:33.761871Z",
+    "email": "invitee@example.com",
+    "event": "https://api.calendly.com/scheduled_events/1ac9e88e-eae3-4e4b-b979-d770cff02d72",
+    "first_name": null,
+    "invitee_scheduled_by": "https://api.calendly.com/users/8ec9d4df-39c5-463a-8b40-bcb5d0a70edf",
+    "last_name": null,
+    "name": "Ninad Magdum",
+    "new_invitee": null,
+    "no_show": null,
+    "old_invitee": null,
+    "payment": null,
+    "questions_and_answers": [
+      {
+        "answer": "+1 555 010 0000",
+        "position": 0,
+        "question": "What is your phone number?"
+      }
+    ],
+    "reconfirmation": null,
+    "reschedule_url": "https://calendly.com/reschedulings/22a0f2d6-1bde-4fc1-95c1-d969df1da21d",
+    "rescheduled": false,
+    "routing_form_submission": null,
+    "scheduled_event": {
+      "created_at": "2025-07-09T06:04:33.743275Z",
+      "end_time": "2025-07-09T18:00:00.000000Z",
+      "event_guests": [],
+      "event_memberships": [
+        {
+          "user": "https://api.calendly.com/users/76e8f2b2-b38c-41c8-826f-4b61f2ba22ba",
+          "user_email": "zan@dataengineeracademy.com",
+          "user_name": "Zan Strmec"
+        }
+      ],
+      "event_type": "https://api.calendly.com/event_types/d639ecd3-8718-4068-955a-436b10d72c78",
+      "invitees_counter": {
+        "total": 1,
+        "active": 1,
+        "limit": 1
+      },
+      "location": {
+        "location": null,
+        "type": "custom"
+      },
+      "meeting_notes_html": null,
+      "meeting_notes_plain": null,
+      "name": "Data Engineer Academy Info Session",
+      "start_time": "2025-07-09T17:45:00.000000Z",
+      "status": "active",
+      "updated_at": "2025-07-09T06:04:33.743275Z",
+      "uri": "https://api.calendly.com/scheduled_events/1ac9e88e-eae3-4e4b-b979-d770cff02d72"
+    },
+    "scheduling_method": null,
+    "status": "active",
+    "text_reminder_number": null,
+    "timezone": "Asia/Calcutta",
+    "tracking": {
+      "utm_campaign": null,
+      "utm_source": null,
+      "utm_medium": null,
+      "utm_content": null,
+      "utm_term": null,
+      "salesforce_uuid": null
+    },
+    "updated_at": "2025-07-09T06:04:33.761871Z",
+    "uri": "https://api.calendly.com/scheduled_events/1ac9e88e-eae3-4e4b-b979-d770cff02d72/invitees/22a0f2d6-1bde-4fc1-95c1-d969df1da21d"
+  }
+}

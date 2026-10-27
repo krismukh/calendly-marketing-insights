@@ -1,0 +1,24 @@
+# Decision Log
+
+Decisions taken during the project, with the reason for each. Items marked *pending SME*
+are stated as assumptions in Section 12 of the architecture proposal and may change when
+the SME replies.
+
+| # | Date | Decision | Reason |
+|---|---|---|---|
+| 1 | 2026-10-22 | Implement on Azure rather than AWS, mapping each AWS service in the brief to its Azure equivalent. | Consistent with Projects 2 through 5; the functional requirements, metrics, and deliverables are unchanged. Proposal Section 12, item 1. |
+| 2 | 2026-10-22 | Adopt the Databricks reference design from the brief (not the EMR design). | Delta Lake is native to Databricks; Databricks Workflows provides scheduling and retries without a separate orchestrator. |
+| 3 | 2026-10-23 | Use Azure Databricks as the processing engine rather than Azure Synapse Spark. | Direct equivalent of the reference design; the subscription's two-workspace Synapse limit is already reached; adds a new tool to the portfolio on the final project. Section 12, item 2. |
+| 4 | 2026-10-22 | Store all three layers as Delta tables on ADLS Gen2 (`stcalendlykcm`, containers `bronze`, `silver`, `gold`). | Meets the Delta Lake requirement on Azure storage; same storage family as the earlier projects. |
+| 5 | 2026-10-22 | Lambda architecture mapping: speed layer = webhook receiver landing events within seconds plus an hourly Bronze-to-Silver job; batch layer = daily 06:30 AM Eastern job rebuilding Silver and Gold; serving layer = Gold Delta tables read by Streamlit. | Keeps same-day bookings visible on the dashboard while spend (available Day-1) drives a daily recomputation. Proposal Section 4.1. |
+| 6 | 2026-10-22 | Derive the channel from the `event_type` URI using the three URIs in the brief; retain UTM parameters in Silver as the campaign dimension where present. | UTM fields are null in the sample event; the event type is the reliable key. Section 12, item 6. |
+| 7 | 2026-10-22 | Express booking dates and meeting time slots in Eastern time. | Matches the 06:00 AM Eastern publication of spend and the organization's time zone. Section 12, item 7 (*pending SME*). |
+| 8 | 2026-10-22 | Marketing metrics use only the three campaign event types; the meeting-load metric uses all scheduled events received. | Employee workload includes meetings from every event type. Section 12, item 5 (*pending SME*). |
+| 9 | 2026-10-22 | Where consecutive 30-day spend files overlap, the record from the most recent file wins for each date and channel. Days with spend and no bookings report CPB as not available. | Later files may carry corrections; division by zero is avoided explicitly. Section 12, item 8. |
+| 10 | 2026-10-22 | Invitee personal data (name, email, phone in questions) stays in Bronze only; Silver, Gold, and the dashboard carry no PII. | Metrics need none of it; limits exposure. Proposal Section 8. |
+| 11 | 2026-10-24 | The sample event fixture in `tests/fixtures/` has the invitee email and phone number replaced with placeholders; the rest of the event is as given in the brief. | The repository is public; the real values add nothing to the tests. |
+| 12 | 2026-10-24 | The Function App uses a separate storage account (`stcalendlyfnkcm`) for its runtime state; the data lake account keeps the hierarchical namespace. | The Functions runtime does not support hierarchical-namespace accounts for its own state (carried over from Project 5, decision 12). |
+| 13 | 2026-10-24 | The spend fetcher's timer schedule is written in UTC as `0 15,45 10-16 * * *` (every 30 minutes from 10:15 to 16:45 UTC); each run is idempotent and skips files already landed. | Linux Consumption functions run on UTC and `WEBSITE_TIME_ZONE` is not supported there. The window covers 06:15 to 12:45 Eastern in summer and 05:15 to 11:45 in winter, so the 06:00 AM publication is always inside it; a run that finds nothing new costs nothing. |
+| 14 | 2026-10-24 | Databricks reads the data lake through a Unity Catalog storage credential backed by the access connector's managed identity (`dbac-calendly-kcm`); secrets come from a Key Vault-backed secret scope. | No storage keys or service principal secrets in notebooks or job configuration. |
+| 15 | 2026-10-24 | Until written SME approval arrives, work is limited to Phase 0 (repository, fixtures, decision log) and Phase 1 (environment script). | The brief requires written approval before implementation; these two phases do not depend on the open items and are cheap to adjust. |
+| 16 | 2026-10-24 | Repository `github.com/krismukh/calendly-marketing-insights`, public, local folder `Data Engineering\Project 6\calendly-marketing-insights`. | Same convention as Projects 2 through 5. |

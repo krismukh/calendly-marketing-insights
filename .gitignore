@@ -1,0 +1,25 @@
+# Local secrets and settings
+.env
+local.settings.json
+*.publishsettings
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Data synced for the local dashboard
+dashboards/data/
+data/
+
+# Databricks CLI state
+.databricks/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
