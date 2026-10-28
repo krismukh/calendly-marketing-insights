@@ -99,4 +99,7 @@ az functionapp config appsettings set -n func-calendly-kcm -g rg-calendly --sett
 
 ## Run record
 
-_(to be filled in after deployment: date, health output, smoke test results, spend fetch summary)_
+- 2026-10-27 14:54 UTC: deployed with `infra/deploy_function.sh`; health `{"status": "ok", "storage_configured": true, "verify_signature": false, "signing_key_present": false}`; four functions registered.
+- Smoke test: `invitee.created`, `invitee.canceled`, and `--new-uuid` events all returned HTTP 200 and landed under `calendly/landing/2025/07/09/`.
+- Spend: the scheduled run at 15:15 UTC landed all 30 files; the on-demand run returned `already_landed: 30, latest_available: true, errors: []`.
+- Endpoint URL shared with the program for the subscription; signing key requested.

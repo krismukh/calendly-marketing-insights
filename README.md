@@ -14,8 +14,8 @@ The architecture proposal and diagram are in `docs/`.
 |---|---|---|
 | 0. Preparation | Repository, fixtures, decision log, spend source check | Complete |
 | 1. Environment | `infra/create_environment.sh`, `infra/configure_databricks.sh` | Complete |
-| 2. Capture | `fn_calendly_receiver`, `fn_spend_fetcher`, unit tests | Code complete; deployment and smoke test pending |
-| 3. Delta Lake layers | `01_bronze`, `02_silver`, `03_gold` notebooks | Not started |
+| 2. Capture | `fn_calendly_receiver`, `fn_spend_fetcher`, unit tests | Complete; endpoint shared with the program |
+| 3. Delta Lake layers | `01_bronze`, `02_silver`, `03_gold` notebooks | Notebooks ready; first run pending |
 | 4. Scheduling, CI/CD, observability | Databricks jobs, GitHub Actions deployment, alerts | Not started |
 | 5. Dashboard | Streamlit application | Not started |
 | 6. Subscription and validation | Webhook subscription, live bookings, validation report | Not started |
@@ -77,7 +77,8 @@ python scripts\check_spend_source.py
 
 See `docs/phase1_environment.md` for the resources, settings, run instructions, and
 verification checklist, and `docs/phase2_capture.md` for the functions, their behavior,
-deployment, and the smoke test.
+deployment, and the smoke test; `docs/phase3_delta_layers.md` for the notebooks and their
+first run.
 
 ## Endpoints
 
