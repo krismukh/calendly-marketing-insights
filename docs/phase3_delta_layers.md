@@ -50,4 +50,7 @@ az storage blob delete-batch --account-name stcalendlykcm --source bronze --patt
 
 ## Run record
 
-_(date, cluster, counts from `pipeline_runs`, screenshots in `docs/screenshots/`)_
+- 2026-10-28, serverless compute, notebooks imported to `/Users/krismukh@hotmail.com/`.
+- Bronze: 2,790 spend rows (31 files, 90 each); test events present.
+- Silver: 2 bookings (test, channel `other`, one canceled); spend 180 rows, 2026-08-29 to 2026-10-27, $97,268.32.
+- Gold: six tables written; reconciliation passed; CSV export at `gold/export/`.

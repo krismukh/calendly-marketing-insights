@@ -1,10 +1,14 @@
-name: CI
+name: CI and deploy
 
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   test:
@@ -31,4 +35,49 @@ jobs:
       - name: Shell script syntax
         run: for f in infra/*.sh; do bash -n "$f"; done
 
-  # Deployment jobs (Function App, Databricks notebooks and jobs) are added in Phase 4.
+  deploy-function:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy src/ to func-calendly-kcm
+        uses: Azure/functions-action@v1
+        with:
+          app-name: func-calendly-kcm
+          package: src
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
+          remote-build: true
+
+      - name: Health check
+        run: |
+          sleep 45
+          curl -fsS https://func-calendly-kcm.azurewebsites.net/api/health
+
+  deploy-notebooks:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: databricks/setup-cli@main
+
+      - name: Import notebooks into the workspace
+        run: databricks workspace import-dir notebooks /Users/krismukh@hotmail.com --overwrite
+
+      - name: Update the job definition
+        run: |
+          JOB_ID=$(databricks jobs list --name calendly_pipeline --output json | python3 -c "import json,sys; d=json.load(sys.stdin); print(d[0]['job_id'] if d else '')")
+          if [ -n "$JOB_ID" ]; then
+            databricks jobs reset --json "{\"job_id\": $JOB_ID, \"new_settings\": $(cat jobs/calendly_pipeline.json)}"
+            echo "job $JOB_ID updated"
+          else
+            databricks jobs create --json @jobs/calendly_pipeline.json
+          fi
