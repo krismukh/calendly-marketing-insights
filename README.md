@@ -16,8 +16,8 @@ The architecture proposal and diagram are in `docs/`.
 | 1. Environment | `infra/create_environment.sh`, `infra/configure_databricks.sh` | Complete |
 | 2. Capture | `fn_calendly_receiver`, `fn_spend_fetcher`, unit tests | Complete; endpoint shared with the program |
 | 3. Delta Lake layers | `01_bronze`, `02_silver`, `03_gold` notebooks | Complete; first run 2026-10-28 |
-| 4. Scheduling, CI/CD, observability | Databricks job, GitHub Actions deployment, alert | Scripts ready; setup pending |
-| 5. Dashboard | Streamlit application | Not started |
+| 4. Scheduling, CI/CD, observability | Databricks job, GitHub Actions deployment, alert | Complete; job and deployment live 2026-10-28 |
+| 5. Dashboard | Streamlit application | Complete; run locally against synced Gold exports |
 | 6. Subscription and validation | Webhook subscription, live bookings, validation report | Not started |
 
 SME approval of the architecture was received on 2026-10-27 (decision 20).
@@ -56,7 +56,7 @@ Lambda architecture on Azure (proposal Section 4):
 | `src/calendly_pipeline/` | Shared modules: `config.py`, `verify.py` (signature), `events.py` (parsing, landing paths), `landing.py` (ADLS writes), `spend_client.py` |
 | `notebooks/` | Databricks notebooks in source form (Phase 3) |
 | `jobs/` | `calendly_pipeline.json`, the Databricks job definition |
-| `dashboards/` | Streamlit application (Phase 5) |
+| `dashboards/` | `app.py` (Streamlit, seven pages), `sync_gold.cmd`, `requirements.txt` |
 | `tests/` | pytest unit tests; `tests/fixtures/` holds the sample event and spend records from the brief |
 | `scripts/` | `check_spend_source.py`, `send_test_event.py`; later `reload_range.py` |
 
@@ -78,7 +78,17 @@ python scripts\check_spend_source.py
 See `docs/phase1_environment.md` for the resources, settings, run instructions, and
 verification checklist, and `docs/phase2_capture.md` for the functions, their behavior,
 deployment, and the smoke test; `docs/phase3_delta_layers.md` for the notebooks and their
-first run; `docs/phase4_operations.md` for the job, CI/CD, monitoring, and reload.
+first run; `docs/phase4_operations.md` for the job, CI/CD, monitoring, and reload; `docs/phase5_dashboard.md`
+for the dashboard.
+
+## Dashboard
+
+```
+pip install -r dashboards\requirements.txt
+az login
+dashboards\sync_gold.cmd
+streamlit run dashboards\app.py
+```
 
 ## Endpoints
 
