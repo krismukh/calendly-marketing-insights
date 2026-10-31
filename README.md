@@ -18,7 +18,7 @@ The architecture proposal and diagram are in `docs/`.
 | 3. Delta Lake layers | `01_bronze`, `02_silver`, `03_gold` notebooks | Complete; first run 2026-10-28 |
 | 4. Scheduling, CI/CD, observability | Databricks job, GitHub Actions deployment, alert | Complete; job and deployment live 2026-10-28 |
 | 5. Dashboard | Streamlit application | Complete; run locally against synced Gold exports |
-| 6. Subscription and validation | Webhook subscription, live bookings, validation report | Waiting on the program: subscription and signing key requested 2026-10-27, followed up 2026-10-29 |
+| 6. Subscription and validation | Webhook subscription, live bookings, validation report | Complete; subscription active 2026-10-30, signature verification on 2026-10-31, `docs/final_report.md` |
 
 SME approval of the architecture was received on 2026-10-27 (decision 20).
 
@@ -51,7 +51,7 @@ Lambda architecture on Azure (proposal Section 4):
 
 | Path | Content |
 |---|---|
-| `docs/` | Architecture proposal (Word), draw.io diagram, decision log, phase runbooks, final report, presentation |
+| `docs/` | Architecture proposal (Word), draw.io diagram, decision log, phase runbooks, final report, presentation, dashboard screenshots |
 | `infra/` | `create_environment.sh`, `verify_environment.sh`, `configure_databricks.sh`, `deploy_function.sh`, `create_job.sh`, `create_monitoring.sh` |
 | `src/` | Azure Functions project root: `function_app.py`, `host.json`, `requirements.txt` |
 | `src/calendly_pipeline/` | Shared modules: `config.py`, `verify.py` (signature), `events.py` (parsing, landing paths), `landing.py` (ADLS writes), `spend_client.py` |

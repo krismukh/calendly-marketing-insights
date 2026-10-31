@@ -1,7 +1,6 @@
 # Final Report: Calendly Marketing Insights
 
-Data Engineering Project 6, DE Academy. Krishna C. Mukherjee. Draft of 2026-10-29; Section 6
-is completed when the validation window closes.
+Data Engineering Project 6, DE Academy. Krishna C. Mukherjee. 2026-10-31.
 
 ## 1. Objective
 
@@ -24,6 +23,7 @@ layers, GitHub CI/CD, and written SME approval before implementation.
 | GitHub Actions workflow (lint, tests, Function App deployment, notebook and job deployment) | `.github/workflows/ci.yml` |
 | Streamlit dashboard (seven pages) and Gold sync script | `dashboards/` |
 | Phase runbooks with run records | `docs/phase1_environment.md` to `docs/phase5_dashboard.md` |
+| Dashboard screenshots with live data (2026-10-31) | `docs/screenshots/` |
 | Presentation | `docs/Calendly_Marketing_Insights_Presentation.pptx` |
 | Technology rationale | `README.md`, section "Why this stack" |
 
@@ -63,35 +63,43 @@ Lambda architecture on Azure (proposal Section 4).
 - Hourly job: three tasks, about two minutes on serverless compute; two retries; e-mail on
   failure. First run 2026-10-28 (decision 29).
 - Deployment: every push to `main` runs lint and tests, deploys the Function App from the
-  publish profile, and imports the notebooks and job definition with the Databricks CLI. Seven
-  runs green as of 2026-10-28.
-- Spend ingestion: 31 files landed by 2026-10-28; Silver spend 2026-08-29 to 2026-10-27,
-  $97,268.32 in total; channel totals YouTube $37,967.04, Facebook $35,636.89, TikTok $23,664.39.
+  publish profile, and imports the notebooks and job definition with the Databricks CLI. Nine
+  consecutive runs green as of 2026-10-31.
+- Spend ingestion: 34 daily files landed without manual intervention by 2026-10-31; Silver spend
+  2026-08-29 to 2026-10-30 (63 days), $103,057.86 in total; channel totals YouTube $40,434.58,
+  Facebook $37,758.42, TikTok $24,864.86.
 - Reload: rerun the job; every layer is rebuilt from the retained landing files.
 - Security: function-key authentication on the webhook route, Calendly signature verification
-  once the signing key is received, managed identity for storage, Key Vault for the signing key,
-  no personal data beyond Bronze.
+  (enabled 2026-10-31), managed identity for storage, Key Vault for the signing key, no personal
+  data beyond Bronze.
 
-## 6. Validation (to be completed)
+## 6. Validation
 
-The webhook endpoint URL was shared with the program on 2026-10-27 and the subscription and
-signing key requested; the request was followed up on 2026-10-29.
+The program created the webhook subscription on 2026-10-30 at 14:40 UTC (organization scope,
+`invitee.created` and `invitee.canceled`, state active) and sent the signing key on
+2026-10-31. Signature verification was enabled at 15:45 UTC the same day; the Phase 2 test
+events were deleted from Bronze beforehand.
 
 | Check | Result |
 |---|---|
-| Subscription created by the program | pending |
-| Signature verification enabled (`VERIFY_SIGNATURE=true`) | pending |
-| Test events from Phase 2 deleted from Bronze | pending |
-| First live `invitee.created` landed and visible in Silver within the hour | pending |
-| First `invitee.canceled` reflected as a canceled booking | pending |
-| Spend for the previous day present by 07:00 Eastern on each day of the window | pending |
-| CPB computed for each channel with bookings | pending |
-| Dashboard pages 1.1 to 1.6 populated | pending |
-| Reconciliation check passed on every hourly run | pending |
+| Subscription created by the program | Done, 2026-10-30 |
+| Live events landing in Bronze | 119 events on 2026-10-30 (created and canceled); 53 by 13:10 Eastern on 2026-10-31 |
+| Signature verification enabled (`VERIFY_SIGNATURE=true`, key in Key Vault) | Done; `/api/health` reports `verify_signature: true`, `signing_key_present: true` |
+| Signed deliveries accepted after enabling | Yes: event count rose from 46 to 53 in the following 85 minutes, no 401 responses |
+| Test events deleted from Bronze | Done |
+| First live `invitee.created` visible in Silver and on the dashboard within the hour | Yes; page 1.1 shows 8 campaign bookings on 2026-10-30 (Facebook 5, TikTok 3) and 3 on 2026-10-31 |
+| `invitee.canceled` reflected as canceled booking | Yes; meeting load fell from 123 to 122 after a cancellation |
+| Spend for the previous day present each morning | Yes; Operations shows spend through 2026-10-30, 63 days loaded |
+| CPB computed for channels with bookings | Facebook $4,719.80, TikTok $8,288.29; YouTube n/a (no bookings yet) |
+| Dashboard pages 1.1 to 1.6 populated | Yes; screenshots in `docs/screenshots/` |
+| Reconciliation check passed on every hourly run | Yes; no job failure notification received |
 
-Evidence already in hand: Phase 2 smoke test (created, canceled, and new-uuid test events
-landed and processed through Silver and Gold, `docs/phase2_capture.md`); 31 daily spend files
-ingested without manual intervention; seven consecutive green deployments.
+Figures as of 2026-10-31, 13:50 Eastern: 11 campaign bookings, $103,057.86 spend over 63 days,
+average CPB $9,368.90, 122 meetings across 35 employees (all event types, canceled excluded).
+
+One defect was found and fixed during validation: the dashboard sync left the previous run's
+CSV files in place, doubling spend figures; `sync_gold.cmd` now clears the local folder first
+(decision 31).
 
 ## 7. Known limitations
 
