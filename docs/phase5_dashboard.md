@@ -29,4 +29,7 @@ streamlit run dashboards\app.py
 ```
 
 Rerun `sync_gold.cmd` whenever fresh Gold data is wanted; the hourly job refreshes the exports.
+The script deletes the local `export` folder before downloading, because each Databricks run
+writes CSV part files with new names and a plain download would leave the previous run's
+files beside them, doubling every figure (observed 2026-10-31, decision 31).
 Screenshots for the submission go in `docs/screenshots/`.
